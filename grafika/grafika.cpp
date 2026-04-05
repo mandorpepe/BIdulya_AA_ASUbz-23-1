@@ -79,7 +79,6 @@ int main()
 
 	GLuint shaderProgram = createShaderProgram(vertexShader, fragmentShader);
 
-	glLinkProgram(shaderProgram);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.9f, 0.1f, 0.2f, 1.0f);
