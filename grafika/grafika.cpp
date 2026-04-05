@@ -3,6 +3,8 @@
 #include <iostream>
 #include "GL\glew.h"
 #include "GLFW/glfw3.h"
+#include "shader.h"
+
 
 float points[] = {
 	-0.5f,  0.5f, 0.0f,  
@@ -75,17 +77,8 @@ int main()
 
 	glBindVertexArray(0);
 
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, &vertexShader, NULL);
-	glCompileShader(vs);
+	GLuint shaderProgram = createShaderProgram(vertexShader, fragmentShader);
 
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &fragmentShader, NULL);
-	glCompileShader(fs);
-
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vs);
-	glAttachShader(shaderProgram, fs);
 	glLinkProgram(shaderProgram);
 
 	while (!glfwWindowShouldClose(window)) {
