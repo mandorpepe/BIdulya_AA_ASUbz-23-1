@@ -2,4 +2,5 @@
 #include <GL/glew.h>
 #include <string>
 
-GLuint createShaderProgram(const char* vertexSrc, const char* fragmentSrc);
+GLuint createShaderProgram(const std::string& vertexPath,
+    const std::string& fragmentPath);

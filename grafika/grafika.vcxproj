@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glad\glad\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\glm;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glad\glad\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\glm;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glad\glad\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\glm;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)grafika\glew-2.1.0\glew-2.1.0\include;$(SolutionDir)grafika\glad\glad\include;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\glm;$(SolutionDir)grafika\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -149,6 +149,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fragment.glsl" />
+    <None Include="vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

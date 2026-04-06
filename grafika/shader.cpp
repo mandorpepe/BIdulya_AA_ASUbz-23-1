@@ -1,5 +1,15 @@
 #include "shader.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
+
+std::string readFile(const std::string& path)
+{
+    std::ifstream file(path);
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
 
 void checkCompileErrors(GLuint shader, const std::string& type)
 {
@@ -26,8 +36,15 @@ void checkCompileErrors(GLuint shader, const std::string& type)
     }
 }
 
-GLuint createShaderProgram(const char* vertexSrc, const char* fragmentSrc)
+GLuint createShaderProgram(const std::string& vertexPath,
+    const std::string& fragmentPath)
 {
+    std::string vertexCode = readFile(vertexPath);
+    std::string fragmentCode = readFile(fragmentPath);
+
+    const char* vertexSrc = vertexCode.c_str();
+    const char* fragmentSrc = fragmentCode.c_str();
+
     GLuint vs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vs, 1, &vertexSrc, NULL);
     glCompileShader(vs);
