@@ -37,6 +37,13 @@ float lastFrame = 0.0f;
 const unsigned int SCR_WIDTH = 1024;
 const unsigned int SCR_HEIGHT = 768;
 
+
+float angleOX1 = 0.0f;
+float angleOX2 = 0.0f;
+float angleOX3 = 0.0f;
+
+float scaleValue = 1.0f;
+
 glm::vec3 cubePosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
 struct Vertex {
@@ -44,18 +51,19 @@ struct Vertex {
     glm::vec3 Normal;
 };
 
-
 class Mesh {
 public:
     vector<Vertex> vertices;
     vector<unsigned int> indices;
 
+    string name;
+
     GLuint VAO, VBO, EBO;
 
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices) {
+    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, string name = "") {
         this->vertices = vertices;
         this->indices = indices;
-
+        this->name = name;
         setupMesh();
     }
 
@@ -97,9 +105,63 @@ public:
         loadModel(path);
     }
 
-    void Draw() {
-        for (unsigned int i = 0; i < meshes.size(); i++)
+    void Draw(GLuint shaderProgram,
+        glm::mat4 r1,
+        glm::mat4 r2,
+        glm::mat4 r3)
+    { 
+        glm::vec3 pivot1(0, 0, 2.40817);
+        glm::vec3 pivot2(0, 1.158, 0.9);
+        glm::vec3 pivot3(0, 0.876685, -2.17901);
+
+        glm::mat4 base = glm::mat4(1.0f);
+        base = glm::scale(base, glm::vec3(scaleValue));
+
+        //  вращается вокруг pivot1
+        glm::mat4 transform1 = base;
+        transform1 = glm::translate(transform1, pivot1);
+        transform1 = transform1 * r1;
+        transform1 = glm::translate(transform1, -pivot1);
+
+        //вращается вокруг pivot2
+        glm::mat4 transform2 = transform1;
+        transform2 = glm::translate(transform2, pivot2);
+        transform2 = transform2 * r2;
+        transform2 = glm::translate(transform2, -pivot2);
+
+        // вращается вокруг pivot3
+        glm::mat4 transform3 = transform2;
+        transform3 = glm::translate(transform3, pivot3);
+        transform3 = transform3 * r3;
+        transform3 = glm::translate(transform3, -pivot3);
+
+        for (unsigned int i = 0; i < meshes.size(); i++) {
+            glm::mat4 model = glm::mat4(1.0f);
+
+            if (meshes[i].name.find("Link3") != string::npos ||
+                meshes[i].name.find("joint3") != string::npos) {
+                model = transform3;
+            }
+            else if (meshes[i].name.find("Link2") != string::npos ||
+                meshes[i].name.find("joint2") != string::npos) {
+                model = transform2;
+            }
+            else if (meshes[i].name.find("Link1") != string::npos ||
+                meshes[i].name.find("joint1") != string::npos) {
+                model = transform1;
+            }
+            else {
+                model = base;
+            }
+
+            glUniformMatrix4fv(
+                glGetUniformLocation(shaderProgram, "model"),
+                1, GL_FALSE,
+                glm::value_ptr(model)
+            );
+
             meshes[i].Draw();
+        }
     }
 
 private:
@@ -151,7 +213,7 @@ private:
             }
         }
 
-        return Mesh(vertices, indices);
+        return Mesh(vertices, indices, mesh->mName.C_Str());
     }
 };
 
@@ -169,6 +231,26 @@ void processInput(GLFWwindow* window)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * currentSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * currentSpeed;
+
+    int rotCoeff = 50;
+
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+        angleOX1 -= deltaTime * rotCoeff;
+
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+        angleOX1 += deltaTime * rotCoeff;
+
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS && angleOX2 < 110)
+        angleOX2 += deltaTime * rotCoeff;
+
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS && angleOX2 > -70)
+        angleOX2 -= deltaTime * rotCoeff;
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && angleOX3 < 150)
+        angleOX3 += deltaTime * rotCoeff;
+
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS && angleOX3 > -35)
+        angleOX3 -= deltaTime * rotCoeff;
 }
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
@@ -253,8 +335,6 @@ int main()
     GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
     GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
 
-    //GLint transformLoc = glGetUniformLocation(shaderProgram, "transform");
-
     glEnable(GL_DEPTH_TEST);
 
 
@@ -296,16 +376,26 @@ int main()
 
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePosition);
-        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
+        model = glm::scale(model, glm::vec3(scaleValue));
 
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
+        glm::mat4 r1 = glm::rotate(glm::mat4(1.0f),
+            glm::radians(angleOX1),
+            glm::vec3(0, 1, 0));
 
-        myModel.Draw();
+        glm::mat4 r2 = glm::rotate(glm::mat4(1.0f),
+            glm::radians(angleOX2),
+            glm::vec3(1, 0, 0));
+
+        glm::mat4 r3 = glm::rotate(glm::mat4(1.0f),
+            glm::radians(angleOX3),
+            glm::vec3(1, 0, 0));
+
+        myModel.Draw(shaderProgram, r1, r2, r3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
