@@ -17,7 +17,7 @@
 using namespace std;
 
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);     
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 10.0f);     
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);  
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);      
 
@@ -258,7 +258,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
 
-    Model myModel("Cube.obj");
+    Model myModel("model/bidulyaObj.obj");
     while (!glfwWindowShouldClose(window)) {
 
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -272,6 +272,23 @@ int main()
 
         glUseProgram(shaderProgram);
 
+        glUniform3f(glGetUniformLocation(shaderProgram, "light.ambient"), 0.2f, 0.2f, 0.2f);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "light.diffuse"), 0.8f, 0.8f, 0.8f);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "light.specular"), 1.0f, 1.0f, 1.0f);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "light.position"), 1.2f, 0.0f, 4.0f);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "viewPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "material.ambient"), 1.0f, 0.5f, 0.31f);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "material.diffuse"), 1.0f, 0.5f, 0.31f);
+
+        glUniform3f(glGetUniformLocation(shaderProgram, "material.specular"),0.5f, 0.5f, 0.5f);
+
+        glUniform1f(glGetUniformLocation(shaderProgram, "material.shininess"), 32.0f);
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),
             (float)SCR_WIDTH / (float)SCR_HEIGHT,
             0.1f, 100.0f);
@@ -280,8 +297,9 @@ int main()
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, cubePosition);
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-        glUniform3f(glGetUniformLocation(shaderProgram, "lightColor"), 1.0f, 0, 0);
+
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
